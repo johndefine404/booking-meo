@@ -1,9 +1,11 @@
 import type { Session, Usage } from "./core/session";
+import type { Inbox } from "./core/inbox";
 
 export interface Env {
   AI: Ai;
   SESSION: DurableObjectNamespace<Session>;
   USAGE: DurableObjectNamespace<Usage>;
+  INBOX: DurableObjectNamespace<Inbox>;
   LIMITER?: RateLimit;
 
   STORE_NAME: string;
@@ -13,6 +15,8 @@ export interface Env {
   DAILY_AI_LIMIT: string;
   IDLE_MINUTES: string;
   MOCK?: string;
+  INBOX_DAYS?: string; // 문의함 보관 일수 (기본 30)
+  ADMIN_KEY?: string; // 문의함 조회용 비밀값 (setup 이 만든다)
 
   // 선택: Claude 로 답변 품질을 올릴 때
   ANTHROPIC_API_KEY?: string;

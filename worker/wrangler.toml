@@ -20,9 +20,18 @@ class_name = "Session"
 name = "USAGE"
 class_name = "Usage"
 
+# 문의함: 알림이 없어도 문의를 보관 (기본 30일)
+[[durable_objects.bindings]]
+name = "INBOX"
+class_name = "Inbox"
+
 [[migrations]]
 tag = "v1"
 new_sqlite_classes = ["Session", "Usage"]
+
+[[migrations]]
+tag = "v2"
+new_sqlite_classes = ["Inbox"]
 
 # store/store.md 를 글자 그대로 불러온다
 [[rules]]
@@ -47,5 +56,7 @@ AI_MODEL = "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
 DAILY_AI_LIMIT = "300"
 # 대화가 이 시간(분) 동안 멈추면 사장님 메일로 대화 기록을 보낸다
 IDLE_MINUTES = "30"
+# 문의함 보관 일수
+INBOX_DAYS = "30"
 MAIL_FROM = "부킹냥 <onboarding@resend.dev>"
 MOCK = "0"

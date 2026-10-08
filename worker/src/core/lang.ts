@@ -66,7 +66,7 @@ const T: Record<Lang, Record<Key, string>> = {
     inqContact: "연락받으실 전화번호나 메일 주소를 알려 주세요.",
     inqMessage: "어떤 내용인지 적어 주세요. 예약이면 원하시는 날짜, 시간, 인원을 함께 적어 주세요.",
     consent:
-      "문의를 사장님께 전달하려면 이름과 연락처가 필요합니다. 입력하신 내용은 사장님 휴대폰과 메일로만 전달되고, 이 챗봇 서버에는 남지 않습니다. 동의하시면 \"동의\"를 눌러 주세요.",
+      "문의를 사장님께 전달하려면 이름과 연락처가 필요합니다. 입력하신 내용은 사장님께 전달하는 데만 쓰고, 사장님이 확인할 수 있도록 30일 동안 보관한 뒤 지웁니다. 동의하시면 \"동의\"를 눌러 주세요.",
     agree: "동의",
     cancel: "취소",
     cancelled: "문의 남기기를 취소했습니다. 궁금한 점이 있으면 편하게 물어보세요.",
@@ -86,7 +86,7 @@ const T: Record<Lang, Record<Key, string>> = {
     inqContact: "What phone number or email should we contact you at?",
     inqMessage: "Please write your message. For a booking, include the date, time and number of people.",
     consent:
-      "To pass this to the owner we need your name and contact. It is sent only to the owner's phone and email and is not stored on this chatbot server. Reply \"agree\" to continue.",
+      "To pass this to the owner we need your name and contact. It is used only to pass your message to the owner, kept for 30 days so the owner can read it, then deleted. Reply \"agree\" to continue.",
     agree: "agree",
     cancel: "cancel",
     cancelled: "Cancelled. Feel free to ask anything else.",
@@ -106,7 +106,7 @@ const T: Record<Lang, Record<Key, string>> = {
     inqContact: "Số điện thoại hoặc email để liên hệ với bạn là gì ạ?",
     inqMessage: "Vui lòng ghi nội dung. Nếu đặt chỗ, xin ghi ngày, giờ và số người.",
     consent:
-      "Để chuyển tới chủ cửa hàng, chúng tôi cần tên và thông tin liên hệ của bạn. Thông tin chỉ được gửi tới điện thoại và email của chủ cửa hàng, không lưu trên máy chủ chatbot. Trả lời \"đồng ý\" để tiếp tục.",
+      "Để chuyển tới chủ cửa hàng, chúng tôi cần tên và thông tin liên hệ của bạn. Thông tin chỉ dùng để chuyển tới chủ cửa hàng, được lưu 30 ngày để chủ cửa hàng xem rồi xóa. Trả lời \"đồng ý\" để tiếp tục.",
     agree: "đồng ý",
     cancel: "hủy",
     cancelled: "Đã hủy. Bạn cứ hỏi thêm nếu cần nhé.",
@@ -126,7 +126,7 @@ const T: Record<Lang, Record<Key, string>> = {
     inqContact: "ご連絡先の電話番号またはメールアドレスを教えてください。",
     inqMessage: "内容をご記入ください。ご予約の場合は日付、時間、人数もお書きください。",
     consent:
-      "店主にお伝えするにはお名前とご連絡先が必要です。内容は店主の携帯とメールにのみ送られ、このチャットボットのサーバーには残りません。よろしければ「同意」と送ってください。",
+      "店主にお伝えするにはお名前とご連絡先が必要です。内容は店主にお伝えするためだけに使い、店主が確認できるよう30日間保管した後に削除します。よろしければ「同意」と送ってください。",
     agree: "同意",
     cancel: "キャンセル",
     cancelled: "キャンセルしました。ほかにご質問があればどうぞ。",
@@ -145,7 +145,7 @@ const T: Record<Lang, Record<Key, string>> = {
     inqStart: "我们会马上转告店主。请问您的姓名？(输入\"取消\"可停止)",
     inqContact: "请留下您的电话或邮箱。",
     inqMessage: "请写下留言内容。如需预约，请注明日期、时间和人数。",
-    consent: "转告店主需要您的姓名和联系方式。内容只会发送到店主的手机和邮箱，不会保存在本聊天机器人服务器上。同意请回复\"同意\"。",
+    consent: "转告店主需要您的姓名和联系方式。内容仅用于转告店主，为方便店主查看保存30天后删除。同意请回复\"同意\"。",
     agree: "同意",
     cancel: "取消",
     cancelled: "已取消。还有其他问题请随时提问。",
@@ -165,7 +165,7 @@ const T: Record<Lang, Record<Key, string>> = {
     inqContact: "ขอเบอร์โทรหรืออีเมลสำหรับติดต่อกลับ",
     inqMessage: "กรุณาเขียนรายละเอียด หากจอง โปรดระบุวันที่ เวลา และจำนวนคน",
     consent:
-      "เพื่อส่งถึงเจ้าของร้าน เราต้องใช้ชื่อและช่องทางติดต่อของคุณ ข้อมูลจะส่งไปยังโทรศัพท์และอีเมลของเจ้าของร้านเท่านั้น และไม่ถูกเก็บไว้บนเซิร์ฟเวอร์แชตบอต ตอบ \"ยินยอม\" เพื่อดำเนินการต่อ",
+      "เพื่อส่งถึงเจ้าของร้าน เราต้องใช้ชื่อและช่องทางติดต่อของคุณ ข้อมูลใช้เพื่อส่งถึงเจ้าของร้านเท่านั้น เก็บไว้ 30 วันให้เจ้าของร้านอ่านแล้วลบทิ้ง ตอบ \"ยินยอม\" เพื่อดำเนินการต่อ",
     agree: "ยินยอม",
     cancel: "ยกเลิก",
     cancelled: "ยกเลิกแล้ว สอบถามเพิ่มเติมได้เลย",

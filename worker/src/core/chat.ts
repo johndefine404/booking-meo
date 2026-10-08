@@ -7,6 +7,7 @@ import { generate } from "./llm";
 import { isAgree, isCancel, isInquiryTrigger, t, trackLang, type Lang } from "./lang";
 import { isBookingIntent } from "./prompt";
 import { sessionStub, type SessionData } from "./session";
+import { inboxStub } from "./inbox";
 
 function fresh(channel: Channel, userId: string): SessionData {
   return { channel, userId, startedAt: Date.now(), messages: [], inquiry: null, submitted: [] };
@@ -99,6 +100,11 @@ async function inquiryStep(env: Env, data: SessionData, input: string, lang: Lan
 
 export async function submitInquiry(env: Env, data: SessionData, inquiry: Inquiry): Promise<void> {
   (data.submitted ??= []).push(inquiry);
+  try {
+    await inboxStub(env).add(inquiry, data.channel, data.lang ?? "ko");
+  } catch (e) {
+    console.error("inbox failed", e);
+  }
   try {
     await notifyInquiry(env, inquiry, data.channel, data.lang);
   } catch (e) {

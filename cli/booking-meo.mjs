@@ -163,8 +163,10 @@ async function setup() {
   // 카카오·톡톡 주소용 비밀값은 자동으로 만든다
   state.kakaoKey ??= randomBytes(12).toString("hex");
   state.naverKey ??= randomBytes(12).toString("hex");
+  state.adminKey ??= randomBytes(24).toString("hex");
   put("KAKAO_SKILL_KEY", state.kakaoKey);
   put("NAVER_WEBHOOK_KEY", state.naverKey);
+  put("ADMIN_KEY", state.adminKey);
 
   if (await yes("\n대화 기록·문의를 메일로 받을까요? (Resend 무료 계정 필요)")) {
     put("OWNER_EMAIL", await ask("  받을 메일 주소"));
@@ -222,6 +224,34 @@ async function test() {
   say(`답변 (${r.status}): ${JSON.stringify(await r.json())}`);
 }
 
+// ---------- inbox: 문의함 보기·지우기 ----------
+async function inbox(sub, id) {
+  const root = projectRoot();
+  const s = loadState(root);
+  rl.close();
+  if (!s.url || !s.adminKey) fail("배포 주소나 문의함 비밀값이 없습니다. 먼저 setup 을 실행해 주세요.");
+  const headers = { Authorization: `Bearer ${s.adminKey}` };
+  if (sub === "delete") {
+    if (!id) fail("지울 문의 번호를 적어 주세요. 예: inbox delete 3f2a...");
+    const r = await fetch(`${s.url}/admin/inquiries/${encodeURIComponent(id)}`, { method: "DELETE", headers });
+    return say(r.ok ? "지웠습니다." : `지우지 못했습니다 (${r.status}).`);
+  }
+  const r = await fetch(`${s.url}/admin/inquiries`, { headers });
+  if (!r.ok) fail(`문의함을 열지 못했습니다 (${r.status}).`);
+  const { items } = await r.json();
+  if (!items.length) return say("문의함이 비어 있습니다.");
+  const ch = { web: "홈페이지", kakao: "카카오톡", naver: "네이버 톡톡" };
+  for (const q of items) {
+    const at = new Date(q.at + 9 * 3600_000).toISOString().slice(0, 16).replace("T", " ");
+    say(`\n[${at}] ${ch[q.channel] || q.channel}${q.lang && q.lang !== "ko" ? ` · 손님 언어 ${q.lang}` : ""}`);
+    say(`  이름: ${q.name}`);
+    say(`  연락처: ${q.contact}`);
+    say(`  내용: ${q.message}`);
+    say(`  번호: ${q.id}`);
+  }
+  say(`\n모두 ${items.length}건. 보관 기간이 지나면 자동으로 지워집니다.`);
+}
+
 // ---------- doctor: 설정 점검 ----------
 function doctor() {
   const root = projectRoot();
@@ -248,10 +278,11 @@ const HELP = `부킹냥 설치 도우미
   setup         설치, Cloudflare 로그인, 배포, 메일·알림·톡톡 연결을 차례로 진행합니다
   info          홈페이지 코드, 카카오 스킬 주소, 톡톡 웹훅 주소를 다시 보여 줍니다
   test          배포한 챗봇에 질문을 하나 보내 봅니다
-  doctor        설정이 빠진 곳을 점검합니다`;
+  doctor        설정이 빠진 곳을 점검합니다
+  inbox         문의함을 봅니다 (지우기: inbox delete <번호>)`;
 
-const [cmd, arg] = argv.slice(2);
-const cmds = { init: () => init(arg), setup, info: () => (info(), rl.close()), test, doctor };
+const [cmd, arg, arg2] = argv.slice(2);
+const cmds = { init: () => init(arg), setup, info: () => (info(), rl.close()), test, doctor, inbox: () => inbox(arg, arg2) };
 if (!cmds[cmd]) {
   say(HELP);
   rl.close();

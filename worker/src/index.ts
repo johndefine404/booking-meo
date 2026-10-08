@@ -8,6 +8,8 @@ import naver from "./channels/naver";
 import web from "./channels/web";
 
 export { Session, Usage } from "./core/session";
+export { Inbox } from "./core/inbox";
+import { inboxStub } from "./core/inbox";
 
 const app = new Hono<{ Bindings: Env }>();
 
@@ -49,6 +51,24 @@ app.use(
 );
 
 app.get("/health", (c) => c.json({ ok: true, store: c.env.STORE_NAME }));
+
+// 문의함 조회 (사장님 전용). Authorization: Bearer <ADMIN_KEY>
+async function adminOnly(c: any, next: () => Promise<void>) {
+  const key = c.env.ADMIN_KEY;
+  const got = (c.req.header("Authorization") || "").replace(/^Bearer\s+/i, "");
+  if (!key || got.length !== key.length || !timingSafeEqual(got, key)) return c.json({ error: "unauthorized" }, 401);
+  await next();
+}
+function timingSafeEqual(a: string, b: string) {
+  let r = 0;
+  for (let i = 0; i < a.length; i++) r |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return r === 0;
+}
+app.use("/admin/*", adminOnly);
+app.get("/admin/inquiries", async (c) => c.json({ items: await inboxStub(c.env).list() }));
+app.delete("/admin/inquiries/:id", async (c) =>
+  (await inboxStub(c.env).remove(c.req.param("id"))) ? c.json({ ok: true }) : c.json({ error: "not found" }, 404),
+);
 app.route("/api", web);
 app.route("/kakao", kakao);
 app.route("/naver", naver);
