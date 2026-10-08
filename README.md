@@ -190,9 +190,9 @@ npx wrangler dev --var MOCK:1     # AI 호출 없이 화면과 흐름만 시험
 
 ## 만든 곳
 
-[Define404](https://define404.com) · JohnLKim
+[Define404](https://contact.define404.com) · JohnLKim
 
-설치, 가게 정보 정리, 카카오·톡톡 연결 대행은 Define404에 문의해 주세요.
+설치, 가게 정보 정리, 카카오·톡톡 연결 대행은 https://contact.define404.com 에서 문의해 주세요.
 
 ---
 

@@ -149,7 +149,9 @@ async function setup() {
   const dep = capture("npx", ["wrangler", "deploy"], { cwd: worker });
   process.stdout.write(dep.out.split("\n").filter((l) => /Uploaded|Deployed|https:\/\/|error|Error/i.test(l)).join("\n") + "\n");
   if (!dep.ok) fail("배포에 실패했습니다. 위 오류를 확인해 주세요.");
-  const url = (dep.out.match(/https:\/\/[^\s]+\.workers\.dev/) || [])[0];
+  // 자체 도메인을 붙였으면 그 주소를, 아니면 workers.dev 주소를 쓴다
+  const custom = (dep.out.match(/^\s*([a-z0-9.-]+\.[a-z]{2,})\s+\(custom domain\)/im) || [])[1];
+  const url = custom ? `https://${custom}` : (dep.out.match(/https:\/\/[^\s]+\.workers\.dev/) || [])[0];
   if (url) state.url = url;
 
   say("\n4/4 연결 설정을 넣습니다. 지금 없는 것은 엔터로 건너뛰고 나중에 setup 을 다시 실행하면 됩니다.");
