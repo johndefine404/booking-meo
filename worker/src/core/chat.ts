@@ -71,6 +71,7 @@ async function inquiryStep(env: Env, data: SessionData, input: string, lang: Lan
     return { text, quickReplies, lang };
   };
   const consentButtons = [t(lang, "agree"), t(lang, "cancel")];
+  const consent = t(lang, "consent") + (env.PRIVACY_URL ? `\n${t(lang, "privacy")}: ${env.PRIVACY_URL}` : "");
 
   if (isCancel(input)) {
     data.inquiry = null;
@@ -89,9 +90,9 @@ async function inquiryStep(env: Env, data: SessionData, input: string, lang: Lan
     case "message":
       q.draft.message = input.slice(0, 2000);
       q.step = "consent";
-      return say(t(lang, "consent"), consentButtons);
+      return say(consent, consentButtons);
     case "consent":
-      if (!isAgree(input)) return say(t(lang, "consent"), consentButtons);
+      if (!isAgree(input)) return say(consent, consentButtons);
       await submitInquiry(env, data, q.draft as Inquiry);
       data.inquiry = null;
       return say(t(lang, "received"));

@@ -58,5 +58,8 @@ DAILY_AI_LIMIT = "300"
 IDLE_MINUTES = "30"
 # 문의함 보관 일수
 INBOX_DAYS = "30"
+# 메일 보내는 주소. Gmail API 로 보내면 그 Google 계정 주소(또는 등록한 별칭)여야 한다
 MAIL_FROM = "부킹냥 <onboarding@resend.dev>"
+# 개인정보 처리방침 주소. 적으면 카카오·톡톡 동의 안내에 링크를 붙인다 (위젯은 data-privacy)
+PRIVACY_URL = ""
 MOCK = "0"

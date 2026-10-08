@@ -38,7 +38,7 @@
 네이버 톡톡 ───┼─> Cloudflare Worker ─> Workers AI (가게 정보만 근거로 답변)
 홈페이지 위젯 ─┘        │
                        ├─> 솔라피: 사장님 알림톡 / 문자
-                       └─> Resend: 문의·대화 기록 메일
+                       └─> Gmail API 또는 Resend: 문의·대화 기록 메일
 ```
 
 ## 드는 비용 (사장님 부담, 2026-10 기준)
@@ -49,6 +49,7 @@
 | 알림톡 (솔라피) | 건당 13원 |
 | 문자 대체 발송 (솔라피) | 단문 18원, 장문 45원 |
 | 메일 (Resend) | 월 3,000건까지 무료 |
+| 메일 (Gmail API) | 쓰고 있는 Google 계정·Workspace 의 하루 발송 한도 안에서 추가 비용 없음 |
 | 카카오톡 채널, 오픈빌더, 네이버 톡톡 | 무료 |
 
 Workers AI 무료 할당량으로 하루에 몇 번 답할 수 있는지는 모델과 답변 길이에 따라 다릅니다. `DAILY_AI_LIMIT`(기본 300)를 넘으면 "문의 남기기"로 안내합니다.
@@ -79,7 +80,7 @@ node cli/booking-meo.mjs inbox    # 문의함 보기 (삭제: inbox delete <번�
 - Cloudflare 무료 계정
 - Node.js 20 이상
 - (알림) 솔라피 계정, 발신번호 등록
-- (메일) Resend 계정. 도메인이 없으면 가입한 메일로만 받을 수 있습니다
+- (메일) 둘 중 하나: Resend 계정(도메인이 없으면 가입한 메일로만 받을 수 있습니다) 또는 Gmail API 발송 권한(아래 "메일을 Gmail로 보내기")
 
 ### 2. 가게 정보 쓰기
 
@@ -106,7 +107,27 @@ npx wrangler deploy
 <script src="https://booking-meo.<계정>.workers.dev/widget.js" data-title="우리 가게" defer></script>
 ```
 
-선택 속성: `data-color`(버튼 색), `data-greeting`(첫인사). 첫인사를 비우면 손님 브라우저 언어로 인사합니다.
+선택 속성: `data-color`(버튼 색), `data-greeting`(첫인사), `data-privacy`(개인정보 처리방침 주소), `data-entrust`(처리를 맡긴 업체, 예: `Cloudflare, Inc.(미국)`). 첫인사를 비우면 손님 브라우저 언어로 인사합니다. `data-privacy`를 적으면 문의 동의 칸 아래에 "개인정보 처리방침" 링크가, `data-entrust`를 적으면 위탁 업체 안내가 붙습니다. 적지 않으면 둘 다 나오지 않습니다.
+
+### 메일을 Gmail로 보내기 (선택)
+
+Resend 대신 Google 계정(Google Workspace 포함)으로 보낼 수 있습니다. 워커는 아래 세 비밀값이 모두 있으면 Gmail API를, 없으면 `RESEND_API_KEY`를, 둘 다 없으면 메일 없이 문의함에만 보관합니다.
+
+1. [Google Cloud 콘솔](https://console.cloud.google.com/)에서 프로젝트를 만들고 Gmail API를 켭니다
+2. OAuth 동의 화면을 만들고(Workspace면 "내부"), 범위에 `https://www.googleapis.com/auth/gmail.send` 하나만 넣습니다
+3. 사용자 인증 정보에서 OAuth 클라이언트 ID를 "데스크톱 앱"으로 만들어 클라이언트 ID와 보안 비밀을 받습니다
+4. 그 클라이언트로 보낼 계정에 한 번 로그인해 `gmail.send` 범위만 승인하고 갱신 토큰(refresh token)을 받습니다. [OAuth 2.0 Playground](https://developers.google.com/oauthplayground/)에서 톱니바퀴 메뉴의 "Use your own OAuth credentials"에 3번 값을 넣고 위 범위로 승인하면 받을 수 있습니다 (이 경우 클라이언트를 "웹 애플리케이션"으로 만들고 리디렉션 주소에 `https://developers.google.com/oauthplayground`를 넣습니다)
+5. 비밀값으로 넣고 보내는 주소를 그 계정 주소로 맞춥니다
+
+```bash
+npx wrangler secret put GMAIL_CLIENT_ID
+npx wrangler secret put GMAIL_CLIENT_SECRET
+npx wrangler secret put GMAIL_REFRESH_TOKEN
+npx wrangler secret put OWNER_EMAIL
+# wrangler.toml: MAIL_FROM = "우리 가게 상담 <보내는계정@도메인>"
+```
+
+`MAIL_FROM`의 주소는 승인한 Google 계정 주소이거나 그 계정에 등록한 별칭이어야 합니다. 갱신 토큰은 메일 보내기 말고는 아무 권한이 없으니, 받은편지함 읽기 같은 범위를 함께 승인하지 마세요.
 
 ### 5. 카카오톡 채널 연결
 
@@ -161,7 +182,7 @@ npx wrangler secret put SOLAPI_TEMPLATE_ID
 - 동의 문구에는 개인정보 보호법 제15조 제2항이 정한 네 가지(목적, 항목, 보유 기간, 거부할 권리와 거부 시 불이익)를 담았습니다. 동의하지 않아도 상담 창 질문은 계속 쓸 수 있습니다(같은 법 제22조 제5항)
 - 부킹냥은 손님에게 광고 메시지를 보내지 않습니다. 사장님 알림톡·문자는 사장님 본인에게만 갑니다
 - 위 내용은 법률 자문이 아니라 이 도구의 운영 기준입니다
-- 가게 홈페이지의 개인정보 처리방침에 "상담 챗봇 문의 접수"와 위탁 업체(Cloudflare, 솔라피, Resend)를 적어 두기를 권합니다
+- 가게 홈페이지의 개인정보 처리방침에 "상담 챗봇 문의 접수"와 위탁 업체(Cloudflare, 솔라피, 메일 발송 업체: Resend 또는 Google)를 적어 두고, 위젯에 `data-privacy`로 그 주소를 연결하기를 권합니다
 
 ## 설정 값
 
@@ -173,6 +194,11 @@ npx wrangler secret put SOLAPI_TEMPLATE_ID
 | `AI_MODEL` | vars | Workers AI 모델 |
 | `DAILY_AI_LIMIT` | vars | 하루 AI 답변 상한 |
 | `IDLE_MINUTES` | vars | 대화 기록을 메일로 보내기까지 기다리는 시간(분) |
+| `PRIVACY_URL` | vars | 개인정보 처리방침 주소. 적으면 카카오·톡톡 동의 안내에 링크를 붙입니다 |
+| `MAIL_FROM` | vars | 보내는 사람. Gmail API를 쓰면 그 계정 주소 |
+| `OWNER_EMAIL` | secret | 문의·대화 기록을 받을 메일 |
+| `GMAIL_CLIENT_ID`, `GMAIL_CLIENT_SECRET`, `GMAIL_REFRESH_TOKEN` | secret | Gmail API로 보낼 때 (선택) |
+| `RESEND_API_KEY` | secret | Resend로 보낼 때 (선택) |
 | `ANTHROPIC_API_KEY` | secret | 넣으면 Claude로 답합니다 (선택) |
 
 ## 로컬에서 시험하기
@@ -183,6 +209,8 @@ npm install
 npx wrangler types                # 타입 파일 생성
 cp .dev.vars.example .dev.vars
 npx wrangler dev --var MOCK:1     # AI 호출 없이 화면과 흐름만 시험
+npm test                          # 메일 원문 만들기 단위 시험
+npx tsc --noEmit                  # 타입 검사
 ```
 
 `http://localhost:8787/`을 열면 미리보기 페이지가, `/demo.html`을 열면 위젯만 붙인 빈 페이지가 뜹니다. `MOCK`을 빼면 실제 Workers AI로 답합니다 (계정 로그인 필요).
@@ -201,4 +229,4 @@ npx wrangler dev --var MOCK:1     # AI 호출 없이 화면과 흐름만 시험
 
 ## English
 
-booking-meo is an open-source AI customer chat bot for Korean small businesses. It answers from a single store info file on KakaoTalk Channel (Kakao i Open Builder skill), Naver TalkTalk (chatbot API) and a website widget, hands bookings off to Naver Booking, and notifies the owner by KakaoTalk AlimTalk with SMS fallback (SOLAPI). It runs on the owner's own free Cloudflare account (Workers, Workers AI, Durable Objects). Conversations are not stored: after 30 minutes of inactivity the transcript is emailed to the owner and deleted. MIT licensed.
+booking-meo is an open-source AI customer chat bot for Korean small businesses. It answers from a single store info file on KakaoTalk Channel (Kakao i Open Builder skill), Naver TalkTalk (chatbot API) and a website widget, hands bookings off to Naver Booking, and notifies the owner by KakaoTalk AlimTalk with SMS fallback (SOLAPI). It runs on the owner's own free Cloudflare account (Workers, Workers AI, Durable Objects). Conversations are not stored: after 30 minutes of inactivity the transcript is emailed to the owner and deleted. Mail goes through the Gmail API (OAuth client plus a refresh token limited to the gmail.send scope: set GMAIL_CLIENT_ID, GMAIL_CLIENT_SECRET, GMAIL_REFRESH_TOKEN) or Resend (RESEND_API_KEY). The widget accepts data-privacy (privacy policy URL) and data-entrust (processors) to show them under the consent box. MIT licensed.

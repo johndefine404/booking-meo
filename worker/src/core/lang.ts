@@ -46,6 +46,7 @@ type Key =
   | "inqContact"
   | "inqMessage"
   | "consent"
+  | "privacy"
   | "agree"
   | "cancel"
   | "cancelled"
@@ -67,6 +68,7 @@ const T: Record<Lang, Record<Key, string>> = {
     inqMessage: "어떤 내용인지 적어 주세요. 예약이면 원하시는 날짜, 시간, 인원을 함께 적어 주세요.",
     consent:
       "[개인정보 수집·이용 동의] 목적: 문의에 답하기 위해 사장님께 전달. 항목: 이름, 연락처, 문의 내용. 보유 기간: 30일 뒤 삭제. 동의하지 않으셔도 됩니다. 다만 동의하지 않으면 문의를 남길 수 없고, 질문은 계속하실 수 있습니다. 동의하시면 \"동의\"를 눌러 주세요.",
+    privacy: "개인정보 처리방침",
     agree: "동의",
     cancel: "취소",
     cancelled: "문의 남기기를 취소했습니다. 궁금한 점이 있으면 편하게 물어보세요.",
@@ -87,6 +89,7 @@ const T: Record<Lang, Record<Key, string>> = {
     inqMessage: "Please write your message. For a booking, include the date, time and number of people.",
     consent:
       "[Consent to collect personal information] Purpose: passing your message to the owner so they can reply. Items: name, contact, message. Retention: deleted after 30 days. You may refuse; if you do, you cannot leave a message but can keep asking questions. Reply \"agree\" to continue.",
+    privacy: "Privacy policy",
     agree: "agree",
     cancel: "cancel",
     cancelled: "Cancelled. Feel free to ask anything else.",
@@ -107,6 +110,7 @@ const T: Record<Lang, Record<Key, string>> = {
     inqMessage: "Vui lòng ghi nội dung. Nếu đặt chỗ, xin ghi ngày, giờ và số người.",
     consent:
       "[Đồng ý thu thập thông tin cá nhân] Mục đích: chuyển lời nhắn tới chủ cửa hàng để trả lời. Thông tin: tên, liên hệ, nội dung. Thời hạn: xóa sau 30 ngày. Bạn có quyền từ chối; khi đó bạn không thể để lại lời nhắn nhưng vẫn có thể hỏi tiếp. Trả lời \"đồng ý\" để tiếp tục.",
+    privacy: "Chính sách quyền riêng tư",
     agree: "đồng ý",
     cancel: "hủy",
     cancelled: "Đã hủy. Bạn cứ hỏi thêm nếu cần nhé.",
@@ -127,6 +131,7 @@ const T: Record<Lang, Record<Key, string>> = {
     inqMessage: "内容をご記入ください。ご予約の場合は日付、時間、人数もお書きください。",
     consent:
       "[個人情報の収集・利用への同意] 目的: 店主からの返信のためにお伝えします。項目: お名前、連絡先、お問い合わせ内容。保管期間: 30日後に削除。同意しないこともできます。その場合お問い合わせは残せませんが、質問は続けられます。よろしければ「同意」と送ってください。",
+    privacy: "プライバシーポリシー",
     agree: "同意",
     cancel: "キャンセル",
     cancelled: "キャンセルしました。ほかにご質問があればどうぞ。",
@@ -146,6 +151,7 @@ const T: Record<Lang, Record<Key, string>> = {
     inqContact: "请留下您的电话或邮箱。",
     inqMessage: "请写下留言内容。如需预约，请注明日期、时间和人数。",
     consent: "[个人信息收集与使用同意] 目的：转告店主以便回复。项目：姓名、联系方式、留言内容。保存期限：30天后删除。您可以拒绝；拒绝后无法留言，但仍可继续提问。同意请回复\"同意\"。",
+    privacy: "隐私政策",
     agree: "同意",
     cancel: "取消",
     cancelled: "已取消。还有其他问题请随时提问。",
@@ -166,6 +172,7 @@ const T: Record<Lang, Record<Key, string>> = {
     inqMessage: "กรุณาเขียนรายละเอียด หากจอง โปรดระบุวันที่ เวลา และจำนวนคน",
     consent:
       "[ความยินยอมเก็บข้อมูลส่วนบุคคล] วัตถุประสงค์: ส่งข้อความถึงเจ้าของร้านเพื่อตอบกลับ ข้อมูล: ชื่อ ช่องทางติดต่อ ข้อความ ระยะเวลา: ลบหลัง 30 วัน คุณปฏิเสธได้ แต่จะฝากข้อความไม่ได้ ยังถามต่อได้ ตอบ \"ยินยอม\" เพื่อดำเนินการต่อ",
+    privacy: "นโยบายความเป็นส่วนตัว",
     agree: "ยินยอม",
     cancel: "ยกเลิก",
     cancelled: "ยกเลิกแล้ว สอบถามเพิ่มเติมได้เลย",

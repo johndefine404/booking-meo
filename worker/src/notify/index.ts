@@ -2,6 +2,7 @@ import type { Channel, Env, Inquiry } from "../env";
 import type { SessionData } from "../core/session";
 import type { Lang } from "../core/lang";
 import { sendOwnerMessage } from "./solapi";
+import { sendMail } from "./mail";
 
 const CHANNEL_NAME: Record<Channel, string> = { web: "홈페이지", kakao: "카카오톡", naver: "네이버 톡톡" };
 
@@ -19,7 +20,7 @@ export async function notifyInquiry(env: Env, q: Inquiry, channel: Channel, lang
       "#{연락처}": q.contact,
       "#{내용}": q.message.slice(0, 500),
     }),
-    sendMail(env, `[부킹냥] 새 문의: ${q.name} (${ch})`, text),
+    sendMail(env, { subject: `[${env.STORE_NAME}] 새 문의: ${q.name} (${ch})`, text }),
   ];
   const results = await Promise.allSettled(jobs);
   for (const r of results) if (r.status === "rejected") console.error("notify", r.reason);
@@ -41,18 +42,5 @@ export async function sendTranscript(env: Env, d: SessionData): Promise<void> {
     "",
     "이 기록은 메일로만 보내고 챗봇 서버에서는 지웠습니다.",
   ].join("\n");
-  await sendMail(env, `[부킹냥] ${CHANNEL_NAME[d.channel]} 상담 기록 ${when}`, body);
-}
-
-async function sendMail(env: Env, subject: string, text: string): Promise<void> {
-  if (!env.RESEND_API_KEY || !env.OWNER_EMAIL) {
-    console.log("mail skipped (RESEND_API_KEY/OWNER_EMAIL 없음)", subject);
-    return;
-  }
-  const res = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, "Content-Type": "application/json" },
-    body: JSON.stringify({ from: env.MAIL_FROM, to: env.OWNER_EMAIL, subject, text }),
-  });
-  if (!res.ok) throw new Error(`resend ${res.status} ${(await res.text()).slice(0, 200)}`);
+  await sendMail(env, { subject: `[${env.STORE_NAME}] ${CHANNEL_NAME[d.channel]} 상담 기록 ${when}`, text: body });
 }

@@ -22,7 +22,13 @@ export interface Env {
   ANTHROPIC_API_KEY?: string;
   CLAUDE_MODEL?: string;
 
-  // 대화 기록 메일 (Resend)
+  // 개인정보 처리방침 주소. 있으면 동의 안내에 함께 보낸다
+  PRIVACY_URL?: string;
+
+  // 대화 기록·문의 메일. Gmail API 가 먼저, 없으면 Resend, 둘 다 없으면 보내지 않는다
+  GMAIL_CLIENT_ID?: string;
+  GMAIL_CLIENT_SECRET?: string;
+  GMAIL_REFRESH_TOKEN?: string; // gmail.send 권한만 받은 갱신 토큰
   RESEND_API_KEY?: string;
   OWNER_EMAIL?: string;
   MAIL_FROM: string;

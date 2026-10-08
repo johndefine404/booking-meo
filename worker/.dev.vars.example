@@ -1,9 +1,12 @@
 # 로컬 시험용 비밀값. 이 파일을 .dev.vars 로 복사해서 채운다 (.dev.vars 는 저장소에 올리지 않는다)
 # 운영에서는 같은 이름으로 npx wrangler secret put <이름> 을 쓴다
 
-# 대화 기록·문의 메일 (Resend, 무료 월 3,000건)
-RESEND_API_KEY=
+# 대화 기록·문의 메일. Gmail API 세 값이 모두 있으면 Gmail, 없으면 Resend(무료 월 3,000건)
 OWNER_EMAIL=
+GMAIL_CLIENT_ID=
+GMAIL_CLIENT_SECRET=
+GMAIL_REFRESH_TOKEN=
+RESEND_API_KEY=
 
 # 사장님 알림 (솔라피)
 SOLAPI_API_KEY=
