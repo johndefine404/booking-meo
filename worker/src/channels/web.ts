@@ -20,7 +20,8 @@ web.post("/chat", async (c) => {
 
 web.post("/inquiry", async (c) => {
   const b = (await c.req.json().catch(() => null)) as Record<string, unknown> | null;
-  if (!b || b.website) return c.json({ ok: true }); // 봇이 채우는 숨은 칸
+  if (!b || typeof b !== "object") return c.json({ error: "잘못된 요청입니다" }, 400);
+  if (b.website) return c.json({ ok: true }); // 봇이 채우는 숨은 칸
   const sessionId = String(b.sessionId ?? "");
   const name = String(b.name ?? "").trim().slice(0, 50);
   const contact = String(b.contact ?? "").trim().slice(0, 100);
