@@ -1,0 +1,22 @@
+# 로컬 시험용 비밀값. 이 파일을 .dev.vars 로 복사해서 채운다 (.dev.vars 는 저장소에 올리지 않는다)
+# 운영에서는 같은 이름으로 npx wrangler secret put <이름> 을 쓴다
+
+# 대화 기록·문의 메일 (Resend, 무료 월 3,000건)
+RESEND_API_KEY=
+OWNER_EMAIL=
+
+# 사장님 알림 (솔라피)
+SOLAPI_API_KEY=
+SOLAPI_API_SECRET=
+SOLAPI_SENDER=
+OWNER_PHONE=
+SOLAPI_PFID=
+SOLAPI_TEMPLATE_ID=
+
+# 채널 연결
+KAKAO_SKILL_KEY=
+NAVER_WEBHOOK_KEY=
+NAVER_TALK_TOKEN=
+
+# 선택: Claude 로 답변
+ANTHROPIC_API_KEY=

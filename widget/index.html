@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>부킹냥 미리보기</title>
+<meta name="description" content="홈페이지가 없어도 카카오톡 채널, 네이버 톡톡에서 손님 문의에 답하는 소상공인용 오픈소스 AI 상담 챗봇">
+<link rel="icon" href="./logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+  :root{
+    --brand:#C94A22; --ink:#2A211D; --sub:#5F544E; --line:#E8E0DA; --bg:#FBF8F5; --card:#FFFFFF;
+    --kakao-bg:#B9CCDD; --kakao-me:#FEE500; --naver:#03C75A;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif;word-break:keep-all;line-height:1.6}
+  a{color:inherit}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+  header.top{display:flex;align-items:center;justify-content:space-between;padding:20px 0}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px;text-decoration:none}
+  .brand img{width:36px;height:36px}
+  .top nav{display:flex;gap:16px;font-size:14px;color:var(--sub)}
+  .top nav a{text-decoration:none}
+  .top nav a:hover{color:var(--ink)}
+
+  .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center;padding:40px 0 72px}
+  .hero h1{font-size:clamp(30px,4.4vw,48px);line-height:1.25;letter-spacing:-.02em;margin:0 0 18px;font-weight:800}
+  .hero h1 em{font-style:normal;color:var(--brand)}
+  .hero p.lead{font-size:18px;color:var(--sub);margin:0 0 28px;max-width:520px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+  .chip{font-size:13px;padding:6px 12px;border:1px solid var(--line);border-radius:999px;background:var(--card)}
+  .try{display:flex;align-items:center;gap:14px;padding:16px 18px;border-radius:14px;background:var(--card);border:1px solid var(--line);max-width:520px}
+  .try img{width:44px;height:44px;flex:none}
+  .try b{display:block;font-size:15px}
+  .try span{font-size:13px;color:var(--sub)}
+
+  .phone{width:min(340px,100%);margin-left:auto;border-radius:32px;background:#1d1d1f;padding:10px;box-shadow:0 24px 60px rgba(42,33,29,.18)}
+  .screen{border-radius:24px;overflow:hidden;background:var(--kakao-bg)}
+  .k-head{display:flex;align-items:center;gap:8px;padding:14px 14px 10px;background:var(--kakao-bg);font-size:15px;font-weight:700;color:#1e1e1e}
+  .k-head img{width:30px;height:30px;border-radius:10px;background:var(--brand);padding:2px}
+  .k-body{padding:6px 12px 16px;display:flex;flex-direction:column;gap:8px;min-height:430px}
+  .k-row{display:flex;gap:6px;align-items:flex-start}
+  .k-row.me{justify-content:flex-end}
+  .k-av{width:32px;height:32px;border-radius:12px;background:var(--brand);padding:2px;flex:none}
+  .k-col{display:flex;flex-direction:column;gap:4px;max-width:78%}
+  .k-name{font-size:11px;color:#46525d}
+  .k-b{background:#fff;border-radius:4px 14px 14px 14px;padding:8px 11px;font-size:13px;line-height:1.5;color:#1e1e1e}
+  .me .k-b{background:var(--kakao-me);border-radius:14px 4px 14px 14px}
+  .k-card{background:#fff;border-radius:4px 14px 14px 14px;overflow:hidden;font-size:13px;color:#1e1e1e}
+  .k-card p{margin:0;padding:9px 11px}
+  .k-card a{display:block;text-align:center;padding:9px;border-top:1px solid #eee;text-decoration:none;font-weight:600}
+  .k-qr{display:flex;gap:6px;flex-wrap:wrap;padding-left:38px}
+  .k-qr span{font-size:12px;background:#fff;border-radius:999px;padding:5px 11px;border:1px solid #d9d9d9}
+  .t-note{font-size:12px;color:var(--sub);text-align:center;margin-top:10px}
+
+  section.block{padding:72px 0;border-top:1px solid var(--line)}
+  .sec-head{display:grid;grid-template-columns:240px 1fr;gap:32px;margin-bottom:36px}
+  .sec-head .no{font-size:13px;font-weight:700;color:var(--brand);letter-spacing:.06em}
+  .sec-head h2{font-size:clamp(24px,3vw,32px);margin:0 0 8px;line-height:1.3}
+  .sec-head p{margin:0;color:var(--sub);max-width:560px}
+
+  .channels{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--card)}
+  .channels > div{padding:24px;border-right:1px solid var(--line)}
+  .channels > div:last-child{border-right:0}
+  .channels h3{margin:0 0 6px;font-size:17px}
+  .channels p{margin:0;font-size:14px;color:var(--sub)}
+  .channels .tag{display:inline-block;font-size:12px;font-weight:700;margin-bottom:12px;padding:3px 8px;border-radius:6px;background:#F3EEEA}
+
+  .alert-row{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
+  .notice{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px}
+  .notice .who{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--sub);margin-bottom:12px}
+  .notice .who i{width:10px;height:10px;border-radius:50%;background:var(--kakao-me);display:inline-block}
+  .notice pre{margin:0;font-family:inherit;white-space:pre-wrap;font-size:14px;line-height:1.7;background:#FAFAFA;border-radius:10px;padding:14px}
+  .facts{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:14px}
+  .facts li{display:grid;grid-template-columns:120px 1fr;gap:12px;font-size:15px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+  .facts b{color:var(--ink)}
+  .facts span{color:var(--sub)}
+
+  ol.steps{list-style:none;margin:0;padding:0;counter-reset:s;display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+  ol.steps li{counter-increment:s;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px}
+  ol.steps li::before{content:counter(s);display:inline-flex;width:28px;height:28px;border-radius:50%;background:var(--ink);color:#fff;font-size:13px;font-weight:700;align-items:center;justify-content:center;margin-bottom:12px}
+  ol.steps b{display:block;margin-bottom:4px}
+  ol.steps span{font-size:14px;color:var(--sub)}
+  code{font-family:"SF Mono",Menlo,monospace;font-size:13px;background:#F3EEEA;border-radius:6px;padding:2px 6px}
+
+  footer{padding:40px 0 120px;border-top:1px solid var(--line);font-size:14px;color:var(--sub);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+  @media (max-width:860px){
+    .hero{grid-template-columns:1fr;gap:36px;padding-top:16px}
+    .phone{margin:0 auto}
+    .sec-head{grid-template-columns:1fr;gap:8px}
+    .channels{grid-template-columns:1fr}
+    .channels > div{border-right:0;border-bottom:1px solid var(--line)}
+    .channels > div:last-child{border-bottom:0}
+    .alert-row{grid-template-columns:1fr}
+    ol.steps{grid-template-columns:1fr 1fr}
+    .top nav{display:none}
+  }
+  @media (max-width:480px){
+    ol.steps{grid-template-columns:1fr}
+    .facts li{grid-template-columns:1fr;gap:2px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="./"><img src="./logo.svg" alt="">부킹냥</a>
+    <nav>
+      <a href="#channels">창구</a>
+      <a href="#alert">사장님 알림</a>
+      <a href="#install">설치</a>
+      <a href="https://github.com/johndefine404/booking-meo">GitHub</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div>
+      <h1>홈페이지가 없어도, <em>카카오톡에서</em> 손님 문의에 답하는 고양이 직원</h1>
+      <p class="lead">가게 정보 파일 하나만 채우면 카카오톡 채널, 네이버 톡톡, 홈페이지에서 영업시간과 가격을 안내하고, 예약은 네이버 예약으로 넘기고, 문의는 사장님 휴대폰으로 알려 드립니다.</p>
+      <div class="chips">
+        <span class="chip">오픈소스 MIT</span>
+        <span class="chip">사장님 Cloudflare 무료 계정</span>
+        <span class="chip">대화 기록은 메일로만</span>
+      </div>
+      <div class="try">
+        <img src="./cat.svg" alt="" style="background:var(--brand);border-radius:50%;padding:3px">
+        <div><b>지금 바로 대화해 보세요</b><span>오른쪽 아래 고양이를 누르면 예시 가게 "모락 베이커리"의 상담 창이 열립니다. 실제 AI가 답합니다.</span></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="phone" aria-label="카카오톡 채널 대화 예시 화면">
+        <div class="screen">
+          <div class="k-head"><img src="./cat.svg" alt="">모락 베이커리</div>
+          <div class="k-body">
+            <div class="k-row me"><div class="k-b">케이크 2호 얼마예요? 언제까지 예약해야 해요?</div></div>
+            <div class="k-row"><img class="k-av" src="./cat.svg" alt="">
+              <div class="k-col"><span class="k-name">모락 베이커리</span>
+                <div class="k-card"><p>2호 케이크는 46,000원입니다. 최소 3일 전까지 예약하셔야 합니다. 네이버 예약으로 바로 예약하실 수 있습니다.</p><a>네이버 예약하기</a></div>
+              </div>
+            </div>
+            <div class="k-qr"><span>문의 남기기</span></div>
+            <div class="k-row me"><div class="k-b">마카롱도 팔아요?</div></div>
+            <div class="k-row"><img class="k-av" src="./cat.svg" alt="">
+              <div class="k-col"><span class="k-name">모락 베이커리</span>
+                <div class="k-b">확인 후 연락드리겠습니다. "문의 남기기"를 눌러 주시면 사장님이 직접 답해 드립니다.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="t-note">카카오톡 채널에서 보이는 모습 (예시 화면)</p>
+    </div>
+  </section>
+
+  <section class="block" id="channels">
+    <div class="sec-head">
+      <div class="no">01 창구</div>
+      <div><h2>손님이 이미 쓰는 곳에서 답합니다</h2><p>세 창구가 같은 가게 정보와 같은 답변 엔진을 씁니다. 적혀 있지 않은 가격이나 일정은 지어내지 않습니다.</p></div>
+    </div>
+    <div class="channels">
+      <div><span class="tag">1순위</span><h3>카카오톡 채널</h3><p>카카오 i 오픈빌더 스킬로 연결합니다. 답이 늦어지면 "준비 중"을 먼저 보내고 이어서 답합니다.</p></div>
+      <div><span class="tag">2순위</span><h3>네이버 톡톡</h3><p>스마트플레이스에서 들어온 손님에게 톡톡 챗봇 API로 답합니다.</p></div>
+      <div><span class="tag">3순위</span><h3>홈페이지·블로그</h3><p>스크립트 한 줄을 붙이면 이 페이지 오른쪽 아래와 같은 상담 창이 생깁니다.</p></div>
+    </div>
+  </section>
+
+  <section class="block" id="alert">
+    <div class="sec-head">
+      <div class="no">02 사장님 알림</div>
+      <div><h2>문의가 오면 알림톡으로, 안 되면 문자로</h2><p>손님이 문의를 남기면 사장님 휴대폰으로 바로 알립니다. 발송 비용은 사장님 솔라피 계정에서 건당으로 나갑니다.</p></div>
+    </div>
+    <div class="alert-row">
+      <div class="notice" aria-label="사장님 알림톡 예시">
+        <div class="who"><i></i>알림톡 예시</div>
+<pre>[모락 베이커리] 새 문의가 들어왔습니다.
+
+창구: 카카오톡
+이름: 홍길동
+연락처: 010-0000-0000
+내용: 토요일 오후 3시 케이크 2호 예약</pre>
+      </div>
+      <ul class="facts">
+        <li><b>알림톡</b><span>건당 13원, 실패 시 문자로 자동 대체</span></li>
+        <li><b>문자</b><span>단문 18원, 장문 45원</span></li>
+        <li><b>대화 기록</b><span>대화가 30분 멈추면 사장님 메일로 보내고 서버에서 지웁니다</span></li>
+        <li><b>개인정보</b><span>문의는 수집 동의를 받은 뒤에만 전달합니다</span></li>
+        <li><b>서버·AI</b><span>사장님 Cloudflare 무료 할당량 안에서 0원</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="block" id="install">
+    <div class="sec-head">
+      <div class="no">03 설치</div>
+      <div><h2>파일 하나 채우고 배포 한 번</h2><p>자세한 순서는 GitHub README에 있습니다. 직접 하기 어려우면 Define404가 대신 설치해 드립니다.</p></div>
+    </div>
+    <ol class="steps">
+      <li><b>가게 정보 쓰기</b><span><code>store/store.md</code>에 영업시간, 메뉴, 가격, 자주 묻는 질문을 적습니다</span></li>
+      <li><b>배포</b><span>사장님 Cloudflare 계정에 <code>npx wrangler deploy</code> 한 번</span></li>
+      <li><b>창구 연결</b><span>카카오 오픈빌더, 톡톡 파트너센터에 주소를 등록합니다</span></li>
+      <li><b>알림 연결</b><span>솔라피 키와 사장님 휴대폰 번호를 넣습니다</span></li>
+    </ol>
+  </section>
+
+  <footer>
+    <span>부킹냥 (booking-meo) · MIT License · 만든 곳 Define404</span>
+    <span>이 미리보기에서 남긴 문의는 실제로 전달되지 않습니다.</span>
+  </footer>
+</div>
+<script src="./widget.js" data-title="모락 베이커리" defer></script>
+</body>
+</html>

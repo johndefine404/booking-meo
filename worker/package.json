@@ -1,0 +1,21 @@
+{
+  "name": "booking-meo-worker",
+  "private": true,
+  "description": "부킹냥: 한국 소상공인용 AI 상담 챗봇 (카카오톡 채널, 네이버 톡톡, 홈페이지)",
+  "author": "Define404 <john@define404.com>",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "types": "wrangler types",
+    "check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "hono": "^4.6.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.0",
+    "wrangler": "^4.40.0"
+  }
+}
