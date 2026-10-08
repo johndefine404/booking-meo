@@ -5,3 +5,4 @@ node_modules/
 *.log
 .DS_Store
 worker/worker-configuration.d.ts
+worker/wrangler.demo.toml
