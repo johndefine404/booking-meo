@@ -6,3 +6,4 @@ node_modules/
 .DS_Store
 worker/worker-configuration.d.ts
 worker/wrangler.demo.toml
+.booking-meo.json

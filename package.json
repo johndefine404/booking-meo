@@ -1,0 +1,15 @@
+{
+  "name": "booking-meo",
+  "version": "0.1.0",
+  "description": "부킹냥: 한국 소상공인용 AI 상담 챗봇 (카카오톡 채널, 네이버 톡톡, 홈페이지)",
+  "author": "Define404 <john@define404.com>",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "booking-meo": "cli/booking-meo.mjs"
+  },
+  "files": ["cli", "store", "widget", "worker", "tools", "README.md", "LICENSE", ".gitignore"],
+  "engines": {
+    "node": ">=20"
+  }
+}

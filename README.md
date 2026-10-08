@@ -53,7 +53,25 @@
 
 Workers AI 무료 할당량으로 하루에 몇 번 답할 수 있는지는 모델과 답변 길이에 따라 다릅니다. `DAILY_AI_LIMIT`(기본 300)를 넘으면 "문의 남기기"로 안내합니다.
 
-## 설치
+## 설치 도우미로 설치 (추천)
+
+질문에 답하면 가게 폴더 만들기, 설정, Cloudflare 배포, 카카오·톡톡 연결 주소까지 차례로 맞춰 줍니다. Node.js 20 이상이 필요합니다.
+
+```bash
+npx github:johndefine404/booking-meo init 우리가게   # 가게 이름, 업종 예시, 네이버 예약 주소, 홈페이지 주소를 묻습니다
+cd 우리가게
+# store/store.md 를 우리 가게 내용으로 고칩니다
+node cli/booking-meo.mjs setup    # 설치, Cloudflare 로그인, 배포, 메일·알림·톡톡 연결
+node cli/booking-meo.mjs info     # 홈페이지 코드, 카카오 스킬 주소, 톡톡 웹훅 주소 다시 보기
+node cli/booking-meo.mjs test     # 배포한 챗봇에 질문 하나 보내 보기
+node cli/booking-meo.mjs doctor   # 빠진 설정 점검
+```
+
+- 카카오 스킬 주소와 톡톡 웹훅 주소에 붙는 비밀값은 setup 이 자동으로 만들어 넣습니다.
+- 연결 주소와 비밀값은 폴더 안 `.booking-meo.json` 에 저장됩니다. 저장소에는 올라가지 않습니다.
+- 메일, 문자 알림, 톡톡은 지금 계정이 없으면 건너뛰고 나중에 setup 을 다시 실행하면 됩니다.
+
+## 직접 설치
 
 ### 1. 준비물
 
