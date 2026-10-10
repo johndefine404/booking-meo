@@ -1,6 +1,6 @@
 """[Define404] 냥 시리즈 고양이 마스코트: 로티(JSON)와 로고(SVG)를 같은 도형 정의에서 만든다.
 
-하늘색 덩어리 고양이(몸, 귀 둘, 말린 꼬리, 먹색 눈, 수염). 원 색과 배지는 제품마다 다르다.
+흰 덩어리 고양이(몸, 귀 둘, 말린 꼬리, 먹색 눈, 수염). 원 색과 배지는 제품마다 다르다.
 사용: python3 tools/make-mascot.py   → widget/mascot.json, widget/logo.svg, widget/cat.svg
 구간: 0~90 대기(꼬리 살랑, 깜빡임, 귀 쫑긋), 90~150 답변 중(몸 들썩, 꼬리 빠르게)
 다른 냥 저장소의 로고도 이 파일의 도형을 가져다 쓴다(import 해서 cat_svg, logo_svg 사용).
@@ -10,9 +10,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 W = H = 120
-CAT = "#6CC4F2"       # Define404 하늘색
+CAT = "#FFFFFF"       # 흰 고양이 (2026-10-11 김팀장: 아이콘 고양이 흰색 통일)
 INK = "#141414"
-BRAND = "#C94A22"     # 부킹냥 원 색
+BRAND = "#E5670E"     # 부킹냥 원 색
 
 # 도형 정의 (로티와 SVG 공용). 120 x 120 원 안 가운데에 앉도록 배치했다.
 BODY = (16, 47, 68, 44, 22)                       # x, y, 폭, 높이, 모서리

@@ -102,7 +102,7 @@ async function init(target) {
 
   const booking = await ask("\n네이버 예약 주소 (없으면 엔터)");
   const site = await ask("챗봇을 붙일 홈페이지 주소, 여러 개면 쉼표 (없으면 엔터)");
-  const color = await ask("상담 버튼 색", "#C94A22");
+  const color = await ask("상담 버튼 색", "#E5670E");
 
   const tomlPath = join(dir, "worker", "wrangler.toml");
   let toml = readFileSync(tomlPath, "utf8");
@@ -199,7 +199,7 @@ function info(root = projectRoot()) {
   const base = s.url || "https://<배포 주소>";
   say("\n붙여 넣을 곳 정리");
   say("\n[홈페이지·블로그] </body> 바로 앞에 한 줄:");
-  say(`  <script src="${base}/widget.js" data-title="${s.store || "우리 가게"}" data-color="${s.color || "#C94A22"}" defer></script>`);
+  say(`  <script src="${base}/widget.js" data-title="${s.store || "우리 가게"}" data-color="${s.color || "#E5670E"}" defer></script>`);
   say("\n[카카오 i 오픈빌더] 스킬 주소 (폴백 블록에 연결, 블록 설정에서 콜백 켜기):");
   say(`  ${base}/kakao/${s.kakaoKey || "<setup 후 생성>"}`);
   say("\n[네이버 톡톡 파트너센터] 웹훅 주소:");

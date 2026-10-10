@@ -1,6 +1,6 @@
 /* [Define404] 부킹냥(booking-meo) 홈페이지 위젯
  * <script src="https://<워커 주소>/widget.js" data-title="모락 베이커리" defer></script>
- * 선택: data-color="#C94A22" data-greeting="안녕하세요..." data-api="https://<워커 주소>"
+ * 선택: data-color="#E5670E" data-greeting="안녕하세요..." data-api="https://<워커 주소>"
  *       data-privacy="https://<개인정보 처리방침 주소>" (있으면 동의 칸 아래에 링크를 단다)
  *       data-entrust="Cloudflare, Inc.(미국)" (처리를 맡긴 업체. 있으면 동의 칸 아래에 적는다)
  */
@@ -11,7 +11,7 @@
   var cfg = {
     api: (ds.api || base).replace(/\/$/, ""),
     title: ds.title || "상담",
-    color: ds.color || "#C94A22",
+    color: ds.color || "#E5670E",
     greeting: ds.greeting || "",
     privacy: /^https?:\/\//.test(ds.privacy || "") ? ds.privacy : "",
     entrust: ds.entrust || "",
