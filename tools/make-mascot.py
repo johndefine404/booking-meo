@@ -1,17 +1,30 @@
-"""[Define404] 부킹냥 고양이 마스코트: 로티(JSON)와 로고(SVG)를 같은 도형 정의에서 만든다.
-사용: python3 tools/make-mascot.py   → widget/mascot.json, widget/logo.svg
-구간: 0~90 대기(깜빡임, 귀 쫑긋), 90~150 답변 중(고개 끄덕임)
+"""[Define404] 냥 시리즈 고양이 마스코트: 로티(JSON)와 로고(SVG)를 같은 도형 정의에서 만든다.
+
+하늘색 덩어리 고양이(몸, 귀 둘, 말린 꼬리, 먹색 눈, 수염). 원 색과 배지는 제품마다 다르다.
+사용: python3 tools/make-mascot.py   → widget/mascot.json, widget/logo.svg, widget/cat.svg
+구간: 0~90 대기(꼬리 살랑, 깜빡임, 귀 쫑긋), 90~150 답변 중(몸 들썩, 꼬리 빠르게)
+다른 냥 저장소의 로고도 이 파일의 도형을 가져다 쓴다(import 해서 cat_svg, logo_svg 사용).
 """
 import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 W = H = 120
-BRAND = "#C94A22"
-WHITE = "#FFFFFF"
-INNER = "#FFB6A3"
-DARK = "#2A211D"
-WHISKER = "#D8CFCA"
+CAT = "#6CC4F2"       # Define404 하늘색
+INK = "#141414"
+BRAND = "#C94A22"     # 부킹냥 원 색
+
+# 도형 정의 (로티와 SVG 공용). 120 x 120 원 안 가운데에 앉도록 배치했다.
+BODY = (16, 47, 68, 44, 22)                       # x, y, 폭, 높이, 모서리
+EAR_L = [(20, 57), (25, 27), (44, 49)]
+EAR_R = [(58, 49), (74, 29), (80, 57)]
+TAIL = [((82, 83), (0, 0), (12, -4)),             # (꼭짓점, 들어오는 손잡이, 나가는 손잡이), 상대값
+        ((97, 51), (3, 14), (-2, -10)),
+        ((82, 37), (6, -2), (0, 0))]
+TAIL_W = 10
+EYES = [(37, 72, 6, 9), (57, 72, 6, 9)]
+WHISKERS = [[(15, 74), (26, 73)], [(15, 80), (26, 78)], [(68, 73), (79, 74)], [(68, 78), (79, 80)]]
+WHISKER_W = 1.8
 
 
 def rgb(hex_):
@@ -51,79 +64,93 @@ def ellipse(cx, cy, w, h):
     return {"ty": "el", "p": st([cx, cy]), "s": st([w, h]), "d": 1}
 
 
+def rect(x, y, w, h, r):
+    return {"ty": "rc", "p": st([x + w / 2, y + h / 2]), "s": st([w, h]), "r": st(r), "d": 1}
+
+
 def poly(points, closed=True):
     z = [[0, 0]] * len(points)
     return {"ty": "sh", "ks": st({"i": z, "o": z, "v": [list(p) for p in points], "c": closed})}
+
+
+def curve(nodes):
+    return {"ty": "sh", "ks": st({"v": [list(v) for v, _, _ in nodes], "i": [list(i) for _, i, _ in nodes],
+                                  "o": [list(o) for _, _, o in nodes], "c": False})}
 
 
 def group(name, items, transform=None):
     return {"ty": "gr", "nm": name, "it": items + [transform or tr()]}
 
 
-# 도형 정의 (SVG 와 공유)
-EAR_L = [(27, 56), (33, 20), (55, 42)]
-EAR_R = [(93, 56), (87, 20), (65, 42)]
-IN_L = [(34, 48), (36, 30), (48, 42)]
-IN_R = [(86, 48), (84, 30), (72, 42)]
-HEAD = (60, 68, 80, 66)
-EYES = [(46, 67, 9, 11), (74, 67, 9, 11)]
-NOSE = [(56, 75), (64, 75), (60, 80)]
-MOUTH = [[(60, 80), (55, 84)], [(60, 80), (65, 84)]]
-WHISKERS = [[(24, 74), (40, 76)], [(25, 82), (40, 80)], [(96, 74), (80, 76)], [(95, 82), (80, 80)]]
-
-ear_twitch = anim([(58, 0), (61, -14), (64, 0), (67, -8), (70, 0)], 1)
-blink = anim([(38, [100, 100]), (41, [100, 8]), (44, [100, 100]),
-              (118, [100, 100]), (121, [100, 8]), (124, [100, 100])], 2)
-bob = anim([(90, [60, 60]), (100, [60, 55]), (110, [60, 60]), (120, [60, 55]),
-            (130, [60, 60]), (140, [60, 55]), (150, [60, 60])], 2)
-
-shapes = [
-    # lottie 는 배열 앞쪽 그룹이 위에 그려진다
-    group("whiskers", [poly(w, False) for w in WHISKERS] + [stroke(WHISKER, 2)]),
-    group("mouth", [poly(m, False) for m in MOUTH] + [stroke(DARK, 2)]),
-    group("nose", [poly(NOSE), fill(INNER)]),
-    group("eyes", [ellipse(*e) for e in EYES] + [fill(DARK)],
-          tr(p=(60, 67), a=(60, 67), s=blink)),
-    group("head", [ellipse(*HEAD), fill(WHITE)]),
-    group("ear-r", [group("in", [poly(IN_R), fill(INNER)]), group("out", [poly(EAR_R), fill(WHITE)])],
-          tr(p=(79, 50), a=(79, 50), r=ear_twitch)),
-    group("ear-l", [group("in", [poly(IN_L), fill(INNER)]), group("out", [poly(EAR_L), fill(WHITE)])]),
-]
-
-lottie = {
-    "v": "5.7.4", "fr": 30, "ip": 0, "op": 150, "w": W, "h": H, "nm": "booking-meo", "ddd": 0, "assets": [],
-    "markers": [{"tm": 0, "cm": "idle", "dr": 90}, {"tm": 90, "cm": "typing", "dr": 60}],
-    "layers": [{
-        "ddd": 0, "ind": 1, "ty": 4, "nm": "cat", "sr": 1, "ao": 0, "bm": 0,
-        "ks": {"o": st(100), "r": st(0), "p": bob, "a": st([60, 60, 0]), "s": st([100, 100, 100])},
-        "shapes": shapes, "ip": 0, "op": 150, "st": 0,
-    }],
-}
-(ROOT / "widget" / "mascot.json").write_text(json.dumps(lottie, separators=(",", ":")))
+def lottie(name="booking-meo", body=CAT, feat=INK):
+    tail_base = TAIL[0][0]
+    ear_base = (69, 53)
+    tail_wag = anim([(0, 0), (22, -8), (45, 0), (67, -8), (90, 0),
+                     (98, -10), (106, 0), (114, -10), (122, 0), (130, -10), (138, 0), (150, 0)], 1)
+    blink = anim([(38, [100, 100]), (41, [100, 8]), (44, [100, 100]),
+                  (118, [100, 100]), (121, [100, 8]), (124, [100, 100])], 2)
+    ear = anim([(58, 0), (61, 12), (64, 0), (67, 6), (70, 0)], 1)
+    bob = anim([(90, [60, 60]), (100, [60, 56]), (110, [60, 60]), (120, [60, 56]),
+                (130, [60, 60]), (140, [60, 56]), (150, [60, 60])], 2)
+    eye_c = ((EYES[0][0] + EYES[1][0]) / 2, EYES[0][1])
+    shapes = [
+        # 로티는 배열 앞쪽 그룹이 위에 그려진다
+        group("whiskers", [poly(w, False) for w in WHISKERS] + [stroke(feat, WHISKER_W)]),
+        group("eyes", [ellipse(*e) for e in EYES] + [fill(feat)], tr(p=eye_c, a=eye_c, s=blink)),
+        group("body", [rect(*BODY), fill(body)]),
+        group("ear-r", [poly(EAR_R), fill(body)], tr(p=ear_base, a=ear_base, r=ear)),
+        group("ear-l", [poly(EAR_L), fill(body)]),
+        group("tail", [curve(TAIL), stroke(body, TAIL_W)], tr(p=tail_base, a=tail_base, r=tail_wag)),
+    ]
+    return {
+        "v": "5.7.4", "fr": 30, "ip": 0, "op": 150, "w": W, "h": H, "nm": name, "ddd": 0, "assets": [],
+        "markers": [{"tm": 0, "cm": "idle", "dr": 90}, {"tm": 90, "cm": "typing", "dr": 60}],
+        "layers": [{
+            "ddd": 0, "ind": 1, "ty": 4, "nm": "cat", "sr": 1, "ao": 0, "bm": 0,
+            "ks": {"o": st(100), "r": st(0), "p": bob, "a": st([60, 60, 0]), "s": st([100, 100, 100])},
+            "shapes": shapes, "ip": 0, "op": 150, "st": 0,
+        }],
+    }
 
 
 def pts(p):
     return " ".join(f"{x},{y}" for x, y in p)
 
 
-def cat_svg():
+def tail_d():
+    (v0, _, o0), (v1, i1, o1), (v2, i2, _) = TAIL
+    c = lambda v, d: f"{v[0] + d[0]},{v[1] + d[1]}"
+    return f"M{v0[0]},{v0[1]} C{c(v0, o0)} {c(v1, i1)} {v1[0]},{v1[1]} C{c(v1, o1)} {c(v2, i2)} {v2[0]},{v2[1]}"
+
+
+def cat_svg(body=CAT, feat=INK, whiskers=True):
+    x, y, w, h, r = BODY
     parts = [
-        f'<polygon points="{pts(EAR_L)}" fill="{WHITE}"/>',
-        f'<polygon points="{pts(IN_L)}" fill="{INNER}"/>',
-        f'<polygon points="{pts(EAR_R)}" fill="{WHITE}"/>',
-        f'<polygon points="{pts(IN_R)}" fill="{INNER}"/>',
-        f'<ellipse cx="{HEAD[0]}" cy="{HEAD[1]}" rx="{HEAD[2] / 2}" ry="{HEAD[3] / 2}" fill="{WHITE}"/>',
+        f'<path d="{tail_d()}" fill="none" stroke="{body}" stroke-width="{TAIL_W}" stroke-linecap="round"/>',
+        f'<polygon points="{pts(EAR_L)}" fill="{body}"/>',
+        f'<polygon points="{pts(EAR_R)}" fill="{body}"/>',
+        f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{r}" fill="{body}"/>',
     ]
-    parts += [f'<ellipse cx="{x}" cy="{y}" rx="{w / 2}" ry="{h / 2}" fill="{DARK}"/>' for x, y, w, h in EYES]
-    parts.append(f'<polygon points="{pts(NOSE)}" fill="{INNER}"/>')
-    parts += [f'<polyline points="{pts(m)}" fill="none" stroke="{DARK}" stroke-width="2" stroke-linecap="round"/>' for m in MOUTH]
-    parts += [f'<polyline points="{pts(w)}" fill="none" stroke="{WHISKER}" stroke-width="2" stroke-linecap="round"/>' for w in WHISKERS]
+    parts += [f'<ellipse cx="{a}" cy="{b}" rx="{c / 2}" ry="{d / 2}" fill="{feat}"/>' for a, b, c, d in EYES]
+    if whiskers:
+        parts += [f'<polyline points="{pts(p)}" fill="none" stroke="{feat}" stroke-width="{WHISKER_W}" '
+                  f'stroke-linecap="round"/>' for p in WHISKERS]
     return "".join(parts)
 
 
-svg = (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}">'
-       f'<circle cx="60" cy="60" r="60" fill="{BRAND}"/>{cat_svg()}</svg>')
-(ROOT / "widget" / "logo.svg").write_text(svg)
-(ROOT / "widget" / "cat.svg").write_text(
-    f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}">{cat_svg()}</svg>')
-print("ok", len(json.dumps(lottie)))
+def logo_svg(circle, badge="", label=None, whiskers=True):
+    head = f' role="img" aria-label="{label}"><title>{label}</title>' if label else ">"
+    return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}"{head}'
+            f'<circle cx="60" cy="60" r="60" fill="{circle}"/>{cat_svg(whiskers=whiskers)}{badge}</svg>')
+
+
+def main():
+    (ROOT / "widget" / "mascot.json").write_text(json.dumps(lottie(), separators=(",", ":")))
+    (ROOT / "widget" / "logo.svg").write_text(logo_svg(BRAND))
+    (ROOT / "widget" / "cat.svg").write_text(
+        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}">{cat_svg()}</svg>')
+    print("ok")
+
+
+if __name__ == "__main__":
+    main()

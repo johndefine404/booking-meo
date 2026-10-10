@@ -217,7 +217,7 @@ npx tsc --noEmit                  # 타입 검사
 
 ## 마스코트
 
-고양이 마스코트는 `tools/make-mascot.py`가 로티 애니메이션(`widget/mascot.json`)과 로고(`widget/logo.svg`)를 같은 도형에서 만듭니다. 대기 중에는 눈을 깜빡이고 귀를 움직이며, 답변을 준비할 때는 고개를 끄덕입니다.
+고양이 마스코트는 `tools/make-mascot.py`가 로티 애니메이션(`widget/mascot.json`)과 로고(`widget/logo.svg`)를 같은 도형에서 만듭니다. Define404 하늘색 고양이이며, 대기 중에는 꼬리를 살랑이고 눈을 깜빡이며 귀를 움직이고, 답변을 준비할 때는 몸을 들썩이며 꼬리를 빠르게 흔듭니다.
 
 ## 만든 곳
 
