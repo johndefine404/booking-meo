@@ -5,7 +5,7 @@ import type { Channel, Env, Inquiry, Reply } from "../env";
 import { notifyInquiry } from "../notify";
 import { generate } from "./llm";
 import { isAgree, isCancel, isInquiryTrigger, t, trackLang, type Lang } from "./lang";
-import { isBookingIntent } from "./prompt";
+import { isBookingIntent } from "./booking";
 import { sessionStub, type SessionData } from "./session";
 import { inboxStub } from "./inbox";
 
