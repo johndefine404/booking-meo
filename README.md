@@ -221,7 +221,7 @@ npx tsc --noEmit                  # 타입 검사
 
 ## 만든 곳
 
-[Define404](https://contact.define404.com) · JohnLKim
+[Define404](https://contact.define404.com) · JohnKim
 
 설치, 가게 정보 정리, 카카오·톡톡 연결 대행은 https://contact.define404.com 에서 문의해 주세요.
 
