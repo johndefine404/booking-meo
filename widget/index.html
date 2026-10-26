@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>부킹냥 미리보기</title>
-<meta name="description" content="홈페이지가 없어도 카카오톡 채널, 네이버 톡톡에서 손님 문의에 답하는 소상공인용 오픈소스 AI 상담 챗봇">
+<meta name="description" content="카카오톡 채널, 네이버 톡톡, 홈페이지로 온 손님 질문에 가게 정보대로 답하는 무료 오픈소스 상담 챗봇. 문의가 남으면 사장님 휴대폰으로 알림톡이 가요.">
 <link rel="icon" href="./logo.svg" type="image/svg+xml">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
@@ -117,8 +117,8 @@
 
   <section class="hero">
     <div>
-      <h1>홈페이지가 없어도, <em>카카오톡에서</em> 손님 문의에 답하는 고양이 직원</h1>
-      <p class="lead">가게 정보 파일 하나만 채우면 카카오톡 채널, 네이버 톡톡, 홈페이지에서 영업시간과 가격을 안내하고, 예약은 네이버 예약으로 넘기고, 문의는 사장님 휴대폰으로 알려 드립니다.</p>
+      <h1><em>카카오톡 채널</em>로 온 손님 질문, 가게 정보대로 바로 답해요</h1>
+      <p class="lead">영업시간, 가격, 주차 같은 질문은 가게 정보 파일에 적힌 대로 답하고, 예약은 네이버 예약으로 넘겨요. 손님이 문의를 남기면 사장님 휴대폰으로 알림톡이 가요. 홈페이지가 없어도 카카오톡 채널만 있으면 돼요.</p>
       <div class="chips">
         <span class="chip">오픈소스 MIT</span>
         <span class="chip">사장님 Cloudflare 무료 계정</span>
@@ -126,7 +126,7 @@
       </div>
       <div class="try">
         <img src="./cat.svg" alt="" style="background:var(--brand);border-radius:50%;padding:3px">
-        <div><b>지금 바로 대화해 보세요</b><span>오른쪽 아래 고양이를 누르면 예시 가게 "모락 베이커리"의 상담 창이 열립니다. 실제 AI가 답합니다.</span></div>
+        <div><b>손님처럼 직접 물어보세요</b><span>오른쪽 아래 고양이를 누르면 예시 가게 "모락 베이커리" 상담 창이 열려요. 실제 AI가 답해요.</span></div>
       </div>
     </div>
 
@@ -158,19 +158,19 @@
   <section class="block" id="channels">
     <div class="sec-head">
       <div class="no">01 창구</div>
-      <div><h2>손님이 이미 쓰는 곳에서 답합니다</h2><p>세 창구가 같은 가게 정보와 같은 답변 엔진을 씁니다. 적혀 있지 않은 가격이나 일정은 지어내지 않습니다.</p></div>
+      <div><h2>카카오톡, 네이버 톡톡, 홈페이지 세 곳에서 답해요</h2><p>세 곳 모두 같은 가게 정보로 답해요. 적혀 있지 않은 가격이나 일정은 지어내지 않고 "문의 남기기"로 안내해요.</p></div>
     </div>
     <div class="channels">
-      <div><span class="tag">1순위</span><h3>카카오톡 채널</h3><p>카카오 i 오픈빌더 스킬로 연결합니다. 답이 늦어지면 "준비 중"을 먼저 보내고 이어서 답합니다.</p></div>
-      <div><span class="tag">2순위</span><h3>네이버 톡톡</h3><p>스마트플레이스에서 들어온 손님에게 톡톡 챗봇 API로 답합니다.</p></div>
-      <div><span class="tag">3순위</span><h3>홈페이지·블로그</h3><p>스크립트 한 줄을 붙이면 이 페이지 오른쪽 아래와 같은 상담 창이 생깁니다.</p></div>
+      <div><span class="tag">1순위</span><h3>카카오톡 채널</h3><p>카카오 i 오픈빌더 스킬로 연결해요. 답이 늦어지면 "준비 중"을 먼저 보내고 이어서 답해요.</p></div>
+      <div><span class="tag">2순위</span><h3>네이버 톡톡</h3><p>스마트플레이스에서 톡톡으로 물어본 손님에게 답해요.</p></div>
+      <div><span class="tag">3순위</span><h3>홈페이지·블로그</h3><p>스크립트 한 줄을 붙이면 이 페이지 오른쪽 아래와 같은 상담 창이 생겨요.</p></div>
     </div>
   </section>
 
   <section class="block" id="alert">
     <div class="sec-head">
       <div class="no">02 사장님 알림</div>
-      <div><h2>문의가 오면 알림톡으로, 안 되면 문자로</h2><p>손님이 문의를 남기면 사장님 휴대폰으로 바로 알립니다. 발송 비용은 사장님 솔라피 계정에서 건당으로 나갑니다.</p></div>
+      <div><h2>문의가 남으면 알림톡 건당 13원, 실패하면 문자로</h2><p>손님이 문의를 남기면 사장님 휴대폰으로 바로 알려요. 발송 비용은 사장님 솔라피 계정에서 건당으로 나가요.</p></div>
     </div>
     <div class="alert-row">
       <div class="notice" aria-label="사장님 알림톡 예시">
@@ -185,8 +185,8 @@
       <ul class="facts">
         <li><b>알림톡</b><span>건당 13원, 실패 시 문자로 자동 대체</span></li>
         <li><b>문자</b><span>단문 18원, 장문 45원</span></li>
-        <li><b>대화 기록</b><span>대화가 30분 멈추면 사장님 메일로 보내고 서버에서 지웁니다</span></li>
-        <li><b>개인정보</b><span>문의는 수집 동의를 받은 뒤에만 받고, 30일 보관 후 지웁니다</span></li>
+        <li><b>대화 기록</b><span>대화가 30분 멈추면 사장님 메일로 보내고 서버에서 지워요</span></li>
+        <li><b>개인정보</b><span>문의는 수집 동의를 받은 뒤에만 받고, 30일 보관 후 지워요</span></li>
         <li><b>서버·AI</b><span>사장님 Cloudflare 무료 할당량 안에서 0원</span></li>
       </ul>
     </div>
@@ -195,19 +195,19 @@
   <section class="block" id="install">
     <div class="sec-head">
       <div class="no">03 설치</div>
-      <div><h2>파일 하나 채우고 배포 한 번</h2><p>자세한 순서는 GitHub README에 있습니다. 직접 하기 어려우면 Define404가 대신 설치해 드립니다.</p></div>
+      <div><h2>가게 정보 파일 하나 채우고 배포 한 번</h2><p>자세한 순서는 GitHub README에 있어요. 설치가 어려우면 Define404에 맡기셔도 돼요.</p></div>
     </div>
     <ol class="steps">
-      <li><b>가게 정보 쓰기</b><span><code>store/store.md</code>에 영업시간, 메뉴, 가격, 자주 묻는 질문을 적습니다</span></li>
+      <li><b>가게 정보 쓰기</b><span><code>store/store.md</code>에 영업시간, 메뉴, 가격, 자주 묻는 질문을 적어요</span></li>
       <li><b>배포</b><span>사장님 Cloudflare 계정에 <code>npx wrangler deploy</code> 한 번</span></li>
-      <li><b>창구 연결</b><span>카카오 오픈빌더, 톡톡 파트너센터에 주소를 등록합니다</span></li>
-      <li><b>알림 연결</b><span>솔라피 키와 사장님 휴대폰 번호를 넣습니다</span></li>
+      <li><b>창구 연결</b><span>카카오 오픈빌더, 톡톡 파트너센터에 주소를 등록해요</span></li>
+      <li><b>알림 연결</b><span>솔라피 키와 사장님 휴대폰 번호를 넣어요</span></li>
     </ol>
   </section>
 
   <footer>
     <span>부킹냥 (booking-meo) · MIT License · 만든 곳 <a href="https://define404.com">Define404</a> · <a href="https://contact.define404.com/privacy.html">개인정보 처리방침</a></span>
-    <span>이 미리보기에서 남긴 문의는 실제로 전달되지 않습니다.</span>
+    <span>이 미리보기에서 남긴 문의는 실제로 전달되지 않아요.</span>
   </footer>
 </div>
 <script src="./widget.js" data-title="모락 베이커리" data-privacy="https://contact.define404.com/privacy.html" data-entrust="Cloudflare, Inc.(미국)" defer></script>

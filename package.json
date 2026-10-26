@@ -1,7 +1,7 @@
 {
   "name": "booking-meo",
   "version": "0.1.0",
-  "description": "부킹냥: 한국 소상공인용 AI 상담 챗봇 (카카오톡 채널, 네이버 톡톡, 홈페이지)",
+  "description": "부킹냥: 카카오톡 채널, 네이버 톡톡, 홈페이지 손님 질문에 가게 정보대로 답하는 상담 챗봇",
   "author": "Define404 <john@define404.com>",
   "license": "MIT",
   "type": "module",
